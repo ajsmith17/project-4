@@ -1,13 +1,13 @@
-class Person
+class Post
     if(ENV['DATABASE_URL'])
       uri = URI.parse(ENV['DATABASE_URL'])
       DB = PG.connect(uri.hostname, uri.port, nil, nil, uri.path[1..-1], uri.user, uri.password)
     else
       DB = PG.connect({:host => "localhost", :port => 5432, :dbname => 'contacts_development', :user => "aaroncontacts", :password => "contacts17"})
     end
-    
+
     def self.all
-      results = DB.exec("SELECT * FROM people;")
+      results = DB.exec("SELECT * FROM contacts;")
 
       return results.map do |result|
         {
