@@ -5,6 +5,7 @@ class Person
     else
       DB = PG.connect({:host => "localhost", :port => 5432, :dbname => 'contacts_development', :user => "aaroncontacts", :password => "contacts17"})
     end
+    
     def self.all
       results = DB.exec("SELECT * FROM people;")
 
