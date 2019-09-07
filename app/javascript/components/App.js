@@ -22,7 +22,7 @@ class App extends React.Component {
       }
    };
 
-   handleView = (view, postData) => {
+   handleView = (view, contactData) => {
       let pageTitle = ''
       let formInputs = {
          id: null,
@@ -39,20 +39,20 @@ class App extends React.Component {
          case 'home':
             pageTitle = 'Connections'
             break
-         case 'addPost':
+         case 'addContact':
             pageTitle = 'New Connection'
             break
-         case 'editPost':
+         case 'editContact':
             pageTitle = 'Update Connection'
             formInputs = {
                id: null,
-               first_name: postData.first_name,
-               last_name: postData.last_name,
-               number: postData.number,
-               address: postData.address,
-               email: postData.email,
-               photo: postData.photo,
-               company: postData.company,
+               first_name: contactData.first_name,
+               last_name: contactData.last_name,
+               number: contactData.number,
+               address: contactData.address,
+               email: contactData.email,
+               photo: contactData.photo,
+               company: contactData.company,
             }
             break
          default:
@@ -67,8 +67,63 @@ class App extends React.Component {
       })
    };
 
+   handleCreate = (createData) => {
+     fetch('/posts', {
+       body: JSON.stringify(createData),
+       method: 'Post',
+       headers: {
+         'Accept': 'application/json, text/plain, */*',
+         'Content-Type': 'application/json'
+       }
+     })
+     .then(createdContact => {
+       return createdContact.json()
+     })
+     .then(jsonedContact => {
+       this.handleView('home')
+       this.setState(prevState => {
+         prevState.contacts.push(jsonedContact)
+         return {contacts: prevState.contacts}
+       })
+     })
+     .catch(err => console.log(err))
+   }
+
+   handleUpdate = (updateData) => {
+     fetch(`/posts/${updateData.id}`, {
+       body: JSON.stringify(updateData),
+       method: 'PUT',
+       headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }
+     })
+     .then(updatedContact => {
+       this.handleView('home')
+       this.fetchContacts()
+     })
+     .catch(err => console.log(err))
+   }
+
+   handleDelete = (id) => {
+     fetch(`/posts/${id}`, {
+       method: 'DELETE',
+       headers: {
+         'Accept': 'application/json, text/plain, */*',
+         'Content-Type': 'application/json'
+       }
+     })
+     .then(data => {
+       this.setState(prevState => {
+         const contacts = prevState.contacts.filter(contact => contact.id !== id)
+         return {contacts}
+       })
+     })
+     .catch(err => console.log(err))
+   }
+
    fetchContacts = () => {
-      fetch('posts')
+      fetch('/posts')
          .then(data => data.json())
          .then(jData => {
             console.log(jData)
