@@ -3,7 +3,7 @@ class Post
       uri = URI.parse(ENV['DATABASE_URL'])
       DB = PG.connect(uri.hostname, uri.port, nil, nil, uri.path[1..-1], uri.user, uri.password)
     else
-      DB = PG.connect({:host => "localhost", :port => 5432, :dbname => 'contacts_development', :user => "aaroncontacts", :password => "contacts17"})
+      DB = PG.connect({:host => "localhost", :port => 5432, :dbname => 'contacts_development'})
     end
 
     def self.all

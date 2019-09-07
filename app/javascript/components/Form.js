@@ -27,6 +27,7 @@ class Form extends React.Component {
                   id="first_name"
                   value={this.state.formInputs.first_name}
                   onChange={this.handleChange}
+               />
             </label>
             <label>
                <input
@@ -35,6 +36,7 @@ class Form extends React.Component {
                   id="last_name"
                   value={this.state.formInputs.last_name}
                   onChange={this.handleChange}
+               />
             </label>
             <label>
                <input
@@ -51,6 +53,7 @@ class Form extends React.Component {
                   id="address"
                   value={this.state.formInputs.address}
                   onChange={this.handleChange}
+               />
             </label>
             <label>
                <input
@@ -59,6 +62,7 @@ class Form extends React.Component {
                   id="email"
                   value={this.state.formInputs.email}
                   onChange={this.handleChange}
+               />
             </label>
             <label>
                <input
@@ -67,6 +71,7 @@ class Form extends React.Component {
                   id="photo"
                   value={this.state.formInputs.photo}
                   onChange={this.handleChange}
+               />
             </label>
             <label>
                <input
@@ -75,6 +80,7 @@ class Form extends React.Component {
                   id="company"
                   value={this.state.formInputs.company}
                   onChange={this.handleChange}
+               />
             </label>
             <input
                type="submit"

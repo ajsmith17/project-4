@@ -22,6 +22,7 @@ class App extends React.Component {
       }
    };
 
+   // HANDLERS
    handleView = (view, contactData) => {
       let pageTitle = ''
       let formInputs = {
@@ -67,10 +68,10 @@ class App extends React.Component {
       })
    };
 
-   handleCreate = (createData) => {
-     fetch('/posts', {
-       body: JSON.stringify(createData),
-       method: 'Post',
+   handleCreate = (createContact) => {
+     fetch('posts', {
+       body: JSON.stringify(createContact),
+       method: 'POST',
        headers: {
          'Accept': 'application/json, text/plain, */*',
          'Content-Type': 'application/json'
@@ -89,9 +90,9 @@ class App extends React.Component {
      .catch(err => console.log(err))
    }
 
-   handleUpdate = (updateData) => {
-     fetch(`/posts/${updateData.id}`, {
-       body: JSON.stringify(updateData),
+   handleUpdate = (updateContact) => {
+     fetch(`posts/${updateContact.id}`, {
+       body: JSON.stringify(updateContact),
        method: 'PUT',
        headers: {
         'Accept': 'application/json, text/plain, */*',
@@ -106,7 +107,7 @@ class App extends React.Component {
    }
 
    handleDelete = (id) => {
-     fetch(`/posts/${id}`, {
+     fetch(`posts/${id}`, {
        method: 'DELETE',
        headers: {
          'Accept': 'application/json, text/plain, */*',
@@ -122,6 +123,22 @@ class App extends React.Component {
      .catch(err => console.log(err))
    }
 
+   handleChange = (event) => {
+      console.log(event.target.id)
+      console.log(event.target.value)
+      this.setState({[event.target.id]: event.target.value})
+   };
+
+   handleSubmit = (event) => {
+      event.preventDefault()
+      if (this.state.view.page === 'addContact') {
+         this.handleCreate(this.state.formInputs)
+      } else if (this.state.view.page === 'editContact') {
+         this.handleUpdate(this.state.formInputs)
+      }
+
+   };
+
    fetchContacts = () => {
       fetch('/posts')
          .then(data => data.json())
@@ -132,26 +149,121 @@ class App extends React.Component {
    };
 
    componentDidMount() {
-      this.fetchContacts()
+      if (this.state.view.page === 'home') {
+         this.fetchContacts()
+      } else {
+         this.setState({
+            id: this.state.formInputs.id,
+            first_name: this.state.formInputs.first_name,
+            last_name: this.state.formInputs.last_name,
+            number: this.state.formInputs.number,
+            address: this.state.formInputs.address,
+            email: this.state.formInputs.email,
+            photo: this.state.formInputs.photo,
+            company: this.state.formInputs.company
+      })
+      }
+
    };
 
    render () {
       return (
          <div className='container'>
+         <ul>
+            <li onClick={() => {this.handleView('home')}}>home</li>
+            <li onClick={() => {this.handleView('addContact')}}>add contact</li>
+            <li onClick={() => {this.handleView('updateContact')}}>update contact</li>
+         </ul>
             <h1>Rails and React 4Eva!</h1>
-            <div className='contact'>
-               {this.state.contacts.map((contact) => {
-                  return (
-                     <div key={contact.id}>
-                        <img
-                           src={contact.photo}
-                        />
-                        <h3>{contact.first_name} {contact.last_name}</h3>
-                        <h4>{contact.number}</h4>
-                     </div>
-                  )}
-               )}
-            </div>
+            {this.state.view.page === 'home'
+               ? <div className='contact'
+                     >
+                     {this.state.contacts.map((contact) => {
+                        return (
+                           <div key={contact.id}
+                              onClick={() => {this.handleView('editContact', contact)}}>
+                              <img
+                                 src={contact.photo}
+                              />
+                              <h3>{contact.first_name} {contact.last_name}</h3>
+                              <h4>{contact.number}</h4>
+                           </div>
+                        )}
+                     )}
+                  </div>
+               : <div className='form'>
+                     <form onSubmit={this.handleSubmit}>
+                        <label>
+                           <input
+                              type="text"
+                              placeholder="First Name"
+                              id="first_name"
+                              value={this.state.formInputs.first_name}
+                              onChange={this.handleChange}
+                           />
+                        </label>
+                        <label>
+                           <input
+                              type="text"
+                              placeholder="Last Name"
+                              id="last_name"
+                              value={this.state.formInputs.last_name}
+                              onChange={this.handleChange}
+                           />
+                        </label>
+                        <label>
+                           <input
+                              type="text"
+                              placeholder="Phone Number"
+                              id="number"
+                              value={this.state.formInputs.number}
+                              onChange={this.handleChange}
+                           />
+                        </label>
+                        <label>
+                           <input
+                              type="text"
+                              placeholder="Address"
+                              id="address"
+                              value={this.state.formInputs.address}
+                              onChange={this.handleChange}
+                           />
+                        </label>
+                        <label>
+                           <input
+                              type="text"
+                              placeholder="Email"
+                              id="email"
+                              value={this.state.formInputs.email}
+                              onChange={this.handleChange}
+                           />
+                        </label>
+                        <label>
+                           <input
+                              type="text"
+                              placeholder="Photo"
+                              id="photo"
+                              value={this.state.formInputs.photo}
+                              onChange={this.handleChange}
+                           />
+                        </label>
+                        <label>
+                           <input
+                              type="text"
+                              placeholder="Company"
+                              id="company"
+                              value={this.state.formInputs.company}
+                              onChange={this.handleChange}
+                           />
+                        </label>
+                        <input
+                           type="submit"
+                           value={this.state.view.page === 'addContact'
+                              ? 'add contact'
+                              : 'update contact'}/>
+                     </form>
+                  </div>
+            }
          </div>
       )
    };
