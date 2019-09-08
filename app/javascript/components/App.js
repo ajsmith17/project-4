@@ -148,6 +148,7 @@ class App extends React.Component {
    handleChange = (event) => {
       // console.log(event.target.id)
       // console.log(event.target.value)
+      
       let formInputs = {
             id: this.state.formInputs.id,
             first_name: this.state.formInputs.first_name,
@@ -155,7 +156,7 @@ class App extends React.Component {
             number: this.state.formInputs.number,
             address: this.state.formInputs.address,
             email: this.state.formInputs.email,
-            photo: this.state.formInputs.photo,
+            photo: this.state.formInputs.photo || 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
             company: this.state.formInputs.company
          }
       formInputs[event.target.id] = event.target.value
