@@ -7,7 +7,7 @@ class Post
     end
 
     def self.all
-      results = DB.exec("SELECT * FROM contacts;")
+      results = DB.exec("SELECT * FROM contacts ORDER BY last_name, first_name ASC;")
 
       return results.map do |result|
         {

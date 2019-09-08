@@ -22,3 +22,6 @@ h4 {
 img {
    width: 200px;
 }
+input {
+   display: block;
+}

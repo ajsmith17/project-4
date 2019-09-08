@@ -43,10 +43,13 @@ class App extends React.Component {
          case 'addContact':
             pageTitle = 'New Connection'
             break
+         case 'showContact':
+            pageTitle = 'Show Contact'
+            break
          case 'editContact':
             pageTitle = 'Update Connection'
             formInputs = {
-               id: null,
+               id: contactData.id,
                first_name: contactData.first_name,
                last_name: contactData.last_name,
                number: contactData.number,
@@ -67,7 +70,6 @@ class App extends React.Component {
          formInputs: formInputs
       })
    };
-
    handleCreate = (createContact) => {
      fetch('posts', {
        body: JSON.stringify(createContact),
@@ -89,7 +91,20 @@ class App extends React.Component {
      })
      .catch(err => console.log(err))
    }
-
+   handleShow = (showContact) => {
+      fetch(`posts/${updateContact.id}`, {
+       body: JSON.stringify(updateContact),
+       method: 'GET',
+       headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }
+     })
+     .then(updatedContact => {
+       this.handleView('showContact')
+     })
+     .catch(err => console.log(err))
+   }
    handleUpdate = (updateContact) => {
      fetch(`posts/${updateContact.id}`, {
        body: JSON.stringify(updateContact),
@@ -105,7 +120,6 @@ class App extends React.Component {
      })
      .catch(err => console.log(err))
    }
-
    handleDelete = (id) => {
      fetch(`posts/${id}`, {
        method: 'DELETE',
@@ -122,13 +136,22 @@ class App extends React.Component {
      })
      .catch(err => console.log(err))
    }
-
    handleChange = (event) => {
       console.log(event.target.id)
       console.log(event.target.value)
-      this.setState({[event.target.id]: event.target.value})
+      let formInputs = {
+            id: this.state.formInputs.id,
+            first_name: this.state.formInputs.first_name,
+            last_name: this.state.formInputs.last_name,
+            number: this.state.formInputs.number,
+            address: this.state.formInputs.address,
+            email: this.state.formInputs.email,
+            photo: this.state.formInputs.photo,
+            company: this.state.formInputs.company
+         }
+      formInputs[event.target.id] = event.target.value
+      this.setState({formInputs: formInputs})
    };
-
    handleSubmit = (event) => {
       event.preventDefault()
       if (this.state.view.page === 'addContact') {
@@ -138,7 +161,6 @@ class App extends React.Component {
       }
 
    };
-
    fetchContacts = () => {
       fetch('/posts')
          .then(data => data.json())
@@ -149,21 +171,7 @@ class App extends React.Component {
    };
 
    componentDidMount() {
-      if (this.state.view.page === 'home') {
-         this.fetchContacts()
-      } else {
-         this.setState({
-            id: this.state.formInputs.id,
-            first_name: this.state.formInputs.first_name,
-            last_name: this.state.formInputs.last_name,
-            number: this.state.formInputs.number,
-            address: this.state.formInputs.address,
-            email: this.state.formInputs.email,
-            photo: this.state.formInputs.photo,
-            company: this.state.formInputs.company
-      })
-      }
-
+      this.fetchContacts()
    };
 
    render () {
@@ -176,12 +184,11 @@ class App extends React.Component {
          </ul>
             <h1>Rails and React 4Eva!</h1>
             {this.state.view.page === 'home'
-               ? <div className='contact'
-                     >
+               ? <div className='contact'>
                      {this.state.contacts.map((contact) => {
                         return (
                            <div key={contact.id}
-                              onClick={() => {this.handleView('editContact', contact)}}>
+                              onClick={() => {this.handleView('showContact', contact)}}>
                               <img
                                  src={contact.photo}
                               />
@@ -191,7 +198,16 @@ class App extends React.Component {
                         )}
                      )}
                   </div>
-               : <div className='form'>
+               : this.state.view.page === 'showContact'
+                  ?  <div className='show'>
+                        <h1>{this.state.formInputs.first_name}</h1>
+                        <ul>
+                           <li onClick={() => {this.handleView('editContact', contact)}}>
+                           Edit Contact
+                           </li>
+                        </ul>
+                     </div>
+                  : <div className='form'>
                      <form onSubmit={this.handleSubmit}>
                         <label>
                            <input
