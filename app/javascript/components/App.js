@@ -45,6 +45,17 @@ class App extends React.Component {
             break
          case 'showContact':
             pageTitle = 'Show Contact'
+
+            formInputs = {
+               id: contactData.id,
+               first_name: contactData.first_name,
+               last_name: contactData.last_name,
+               number: contactData.number,
+               address: contactData.address,
+               email: contactData.email,
+               photo: contactData.photo,
+               company: contactData.company,
+            }
             break
          case 'editContact':
             pageTitle = 'Update Connection'
@@ -83,17 +94,14 @@ class App extends React.Component {
        return createdContact.json()
      })
      .then(jsonedContact => {
-       this.handleView('home')
-       this.setState(prevState => {
-         prevState.contacts.push(jsonedContact)
-         return {contacts: prevState.contacts}
-       })
+        this.handleView('home')
+        this.fetchContacts()
      })
      .catch(err => console.log(err))
    }
-   handleShow = (showContact) => {
-      fetch(`posts/${updateContact.id}`, {
-       body: JSON.stringify(updateContact),
+   handleShow = (id) => {
+      fetch(`posts/${id}`, {
+       body: JSON.stringify(id),
        method: 'GET',
        headers: {
         'Accept': 'application/json, text/plain, */*',
@@ -121,24 +129,25 @@ class App extends React.Component {
      .catch(err => console.log(err))
    }
    handleDelete = (id) => {
-     fetch(`posts/${id}`, {
-       method: 'DELETE',
-       headers: {
-         'Accept': 'application/json, text/plain, */*',
-         'Content-Type': 'application/json'
-       }
-     })
-     .then(data => {
-       this.setState(prevState => {
-         const contacts = prevState.contacts.filter(contact => contact.id !== id)
-         return {contacts}
-       })
+      fetch(`posts/${id}`, {
+         method: 'DELETE',
+         headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+         }
+      })
+      .then(data => {
+         this.handleView('home')
+         this.setState(prevState => {
+            const contacts = prevState.contacts.filter(contact => contact.id !== id)
+            return {contacts}
+         })
      })
      .catch(err => console.log(err))
    }
    handleChange = (event) => {
-      console.log(event.target.id)
-      console.log(event.target.value)
+      // console.log(event.target.id)
+      // console.log(event.target.value)
       let formInputs = {
             id: this.state.formInputs.id,
             first_name: this.state.formInputs.first_name,
@@ -165,7 +174,7 @@ class App extends React.Component {
       fetch('/posts')
          .then(data => data.json())
          .then(jData => {
-            console.log(jData)
+            // console.log(jData)
             this.setState({contacts: jData})
          })
    };
@@ -177,17 +186,19 @@ class App extends React.Component {
    render () {
       return (
          <div className='container'>
-         <ul>
-            <li onClick={() => {this.handleView('home')}}>home</li>
-            <li onClick={() => {this.handleView('addContact')}}>add contact</li>
-            <li onClick={() => {this.handleView('updateContact')}}>update contact</li>
-         </ul>
-            <h1>Rails and React 4Eva!</h1>
+         <div className='navigation'>
+            <ul>
+               <li onClick={() => {this.handleView('home')}}>home</li>
+               <li onClick={() => {this.handleView('addContact')}}>add contact</li>
+            </ul>
+         </div>
             {this.state.view.page === 'home'
-               ? <div className='contact'>
+               ? <div className='contacts'>
+                  <h1>Rails and React 4Eva!</h1>
                      {this.state.contacts.map((contact) => {
                         return (
                            <div key={contact.id}
+                              className='contact'
                               onClick={() => {this.handleView('showContact', contact)}}>
                               <img
                                  src={contact.photo}
@@ -200,14 +211,30 @@ class App extends React.Component {
                   </div>
                : this.state.view.page === 'showContact'
                   ?  <div className='show'>
-                        <h1>{this.state.formInputs.first_name}</h1>
-                        <ul>
-                           <li onClick={() => {this.handleView('editContact', contact)}}>
-                           Edit Contact
-                           </li>
-                        </ul>
+                        <h1>Show Contact</h1>
+                        <img
+                           src={this.state.formInputs.photo}
+                        />
+                        <h1>{this.state.formInputs.first_name} {this.state.formInputs.last_name}</h1>
+                        <h3>{this.state.formInputs.number}</h3>
+                        <h3>{this.state.formInputs.email}</h3>
+                        <h3>{this.state.formInputs.company}</h3>
+                        <h3>{this.state.formInputs.address}</h3>
+                        <div className='contact-changes'>
+                           <ul>
+                                 <li onClick={() => {this.handleView('editContact', this.state.formInputs)}}>
+                                 Edit Contact
+                              </li>
+                                 <li onClick={() => {this.handleDelete( this.state.formInputs.id)}}>
+                                 Delete Contact
+                              </li>
+                           </ul>
+                        </div>
                      </div>
                   : <div className='form'>
+                     {this.state.view.page === 'addContact'
+                        ? <h1>Add New Contact</h1>
+                        : <h1>Edit Contact</h1>}
                      <form onSubmit={this.handleSubmit}>
                         <label>
                            <input
@@ -278,6 +305,9 @@ class App extends React.Component {
                               ? 'add contact'
                               : 'update contact'}/>
                      </form>
+                     <button onClick={this.state.view.page === 'editContact'
+                     ? () => {this.handleView('showContact', this.state.formInputs)}
+                     : () => {this.handleView('home')}}>Cancel</button>
                   </div>
             }
          </div>
