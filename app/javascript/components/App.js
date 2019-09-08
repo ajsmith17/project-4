@@ -186,12 +186,12 @@ class App extends React.Component {
    render () {
       return (
          <div className='container'>
-         <div className='navigation'>
-            <ul>
-               <li onClick={() => {this.handleView('home')}}>home</li>
-               <li onClick={() => {this.handleView('addContact')}}>add contact</li>
-            </ul>
-         </div>
+            <div className='navigation'>
+               <ul>
+                  <li onClick={() => {this.handleView('home')}}>home</li>
+                  <li onClick={() => {this.handleView('addContact')}}>add contact</li>
+               </ul>
+            </div>
             {this.state.view.page === 'home'
                ? <div className='contacts'>
                   <h1>Rails and React 4Eva!</h1>

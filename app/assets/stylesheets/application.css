@@ -16,13 +16,16 @@
 /* ============== */
 /*   NAVIGATION   */
 /* ============== */
+body {
+   margin: 0;
+}
 .navigation {
    padding: 3px;
    background: lightgrey;
    width: 100%;
    z-index: 1;
    margin: 0;
-   position: fixed;
+   position: sticky;
    top: 0;
    left: 0;
 }
@@ -43,6 +46,9 @@
 /* ============== */
 /*      HOME      */
 /* ============== */
+.contacts, .show, .form {
+   padding: 10px;
+}
 h3 {
    margin-bottom: 0;
 }
