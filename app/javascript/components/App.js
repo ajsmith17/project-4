@@ -148,7 +148,7 @@ class App extends React.Component {
    handleChange = (event) => {
       // console.log(event.target.id)
       // console.log(event.target.value)
-      
+
       let formInputs = {
             id: this.state.formInputs.id,
             first_name: this.state.formInputs.first_name,
@@ -156,7 +156,7 @@ class App extends React.Component {
             number: this.state.formInputs.number,
             address: this.state.formInputs.address,
             email: this.state.formInputs.email,
-            photo: this.state.formInputs.photo || 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
+            photo: this.state.formInputs.photo,
             company: this.state.formInputs.company
          }
       formInputs[event.target.id] = event.target.value
@@ -189,44 +189,51 @@ class App extends React.Component {
          <div className='container'>
             <div className='navigation'>
                <ul>
-                  <li onClick={() => {this.handleView('home')}}>home</li>
-                  <li onClick={() => {this.handleView('addContact')}}>add contact</li>
+                  <li onClick={() => {this.handleView('home')}}>Home</li>
+                  <li onClick={() => {this.handleView('addContact')}}>Add Contact</li>
                </ul>
+               <h1>Connectr</h1>
             </div>
             {this.state.view.page === 'home'
-               ? <div className='contacts'>
-                  <h1>Rails and React 4Eva!</h1>
-                     {this.state.contacts.map((contact) => {
-                        return (
-                           <div key={contact.id}
-                              className='contact'
-                              onClick={() => {this.handleView('showContact', contact)}}>
-                              <img
-                                 src={contact.photo}
-                              />
-                              <h3>{contact.first_name} {contact.last_name}</h3>
-                              <h4>{contact.number}</h4>
-                           </div>
-                        )}
-                     )}
+               ? <div className='main'>
+
+                      <div className='contacts'>
+                       <div className='contacts-holder'>
+                       {this.state.contacts.map((contact) => {
+                          return (
+                             <div key={contact.id}
+                                className='contact'
+                                onClick={() => {this.handleView('showContact', contact)}}>
+                                <img
+                                   src={contact.photo === ''
+                                 ? 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png' : contact.photo}
+                                />
+                                <h3>{contact.first_name} {contact.last_name}</h3>
+                                <h4>{contact.company}</h4>
+                             </div>
+                          )}
+                       )}
+                      </div>
+                     </div>
                   </div>
                : this.state.view.page === 'showContact'
                   ?  <div className='show'>
-                        <h1>Show Contact</h1>
+
                         <img
-                           src={this.state.formInputs.photo}
+                           src={this.state.formInputs.photo === ''
+                         ? 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png' : this.state.formInputs.photo}
                         />
-                        <h1>{this.state.formInputs.first_name} {this.state.formInputs.last_name}</h1>
+                        <h2>{this.state.formInputs.first_name} {this.state.formInputs.last_name}</h2>
+                        <h3>{this.state.formInputs.company}</h3>
                         <h3>{this.state.formInputs.number}</h3>
                         <h3>{this.state.formInputs.email}</h3>
-                        <h3>{this.state.formInputs.company}</h3>
                         <h3>{this.state.formInputs.address}</h3>
                         <div className='contact-changes'>
                            <ul>
-                                 <li onClick={() => {this.handleView('editContact', this.state.formInputs)}}>
+                                 <li className='editBtn' onClick={() => {this.handleView('editContact', this.state.formInputs)}}>
                                  Edit Contact
                               </li>
-                                 <li onClick={() => {this.handleDelete( this.state.formInputs.id)}}>
+                                 <li className='deleteBtn' onClick={() => {this.handleDelete( this.state.formInputs.id)}}>
                                  Delete Contact
                               </li>
                            </ul>
@@ -234,8 +241,8 @@ class App extends React.Component {
                      </div>
                   : <div className='form'>
                      {this.state.view.page === 'addContact'
-                        ? <h1>Add New Contact</h1>
-                        : <h1>Edit Contact</h1>}
+                        ? <h2>Add New Contact</h2>
+                        : <h2>Edit Contact</h2>}
                      <form onSubmit={this.handleSubmit}>
                         <label>
                            <input
@@ -303,8 +310,8 @@ class App extends React.Component {
                         <input
                            type="submit"
                            value={this.state.view.page === 'addContact'
-                              ? 'add contact'
-                              : 'update contact'}/>
+                              ? 'Add Contact'
+                              : 'Update Contact'}/>
                      </form>
                      <button onClick={this.state.view.page === 'editContact'
                      ? () => {this.handleView('showContact', this.state.formInputs)}

@@ -3,7 +3,7 @@ class Post
       uri = URI.parse(ENV['DATABASE_URL'])
       DB = PG.connect(uri.hostname, uri.port, nil, nil, uri.path[1..-1], uri.user, uri.password)
     else
-      DB = PG.connect({:host => "localhost", :port => 5432, :dbname => 'contacts_development'})
+      DB = PG.connect({:host => "localhost", :port => 5432, :dbname => 'contacts_development', :user => 'aaroncontacts', :password => 'contacts17'})
     end
 
     def self.all
@@ -39,6 +39,7 @@ class Post
     end
 
     def self.create(opts)
+      p opts
       results = DB.exec(
         <<-SQL
           INSERT INTO contacts (first_name, last_name, number, address, email, photo, company)
