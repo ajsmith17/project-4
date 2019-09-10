@@ -73,6 +73,8 @@ body {
 }
 .contact {
   cursor: pointer;
+  max-width: 175px;
+  overflow-wrap: normal;
 }
 .contact:hover {
   padding: 10px 10px 10px 10px;
