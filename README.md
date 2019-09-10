@@ -2,7 +2,7 @@
 
 # Technology
 
-We used Ruby on Rails, React, JavaScript, JSX, and CSS to build this app.
+We used Ruby on Rails, React, JavaScript, JSX, and CSS to build this app. We used Trello to keep track of what was completed and what still needed to be completed.
 
 # Approach
 
