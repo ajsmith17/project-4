@@ -45,7 +45,6 @@ class App extends React.Component {
             break
          case 'showContact':
             pageTitle = 'Show Contact'
-
             formInputs = {
                id: contactData.id,
                first_name: contactData.first_name,
@@ -99,20 +98,6 @@ class App extends React.Component {
      })
      .catch(err => console.log(err))
    }
-   handleShow = (id) => {
-      fetch(`posts/${id}`, {
-       body: JSON.stringify(id),
-       method: 'GET',
-       headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      }
-     })
-     .then(updatedContact => {
-       this.handleView('showContact')
-     })
-     .catch(err => console.log(err))
-   }
    handleUpdate = (updateContact) => {
      fetch(`posts/${updateContact.id}`, {
        body: JSON.stringify(updateContact),
@@ -148,7 +133,6 @@ class App extends React.Component {
    handleChange = (event) => {
       // console.log(event.target.id)
       // console.log(event.target.value)
-
       let formInputs = {
             id: this.state.formInputs.id,
             first_name: this.state.formInputs.first_name,

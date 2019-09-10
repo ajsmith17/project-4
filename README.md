@@ -1,24 +1,17 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Technology
 
-Things you may want to cover:
+We used Ruby on Rails, React, JavaScript, JSX, and CSS to build this app.
 
-* Ruby version
+# Approach
 
-* System dependencies
+We built out the backend first and used Postman to test all of the SQL routes. Second, we built out the front end with REACT. We did all CSS styling last.
 
-* Configuration
+# User Story
 
-* Database creation
+# Notes/Things to Add
 
-* Database initialization
+# App Link
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+https://tranquil-bayou-23722.herokuapp.com/
